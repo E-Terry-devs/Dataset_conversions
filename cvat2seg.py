@@ -111,7 +111,7 @@ def copy_images(source_dir, destination_dir):
     # Create the destination directory if it doesn't exist
     if not os.path.exists(destination_dir):
         os.makedirs(destination_dir)
-    ann_directory = destination_dir.replace('images', 'class_masks')
+    ann_directory = destination_dir.replace('images', 'cls_masks')
     ann_files = os.listdir(ann_directory)
     for root, dirs, files in os.walk(source_dir):
         for file in files:
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     
     annotation_data, labels_mapping = parse_cvat_annotation(args.xml)
 
-    class_directory = os.path.join(args.dest_path, "class_masks")
+    class_directory = os.path.join(args.dest_path, "cls_masks")
     if not os.path.exists(class_directory):
         os.makedirs(class_directory, exist_ok=True)
     stem_directory = os.path.join(args.dest_path, "stem_masks")
