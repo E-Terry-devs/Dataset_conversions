@@ -113,7 +113,7 @@ def copy_images(source_dir, destination_dir):
         os.makedirs(destination_dir)
     ann_directory = destination_dir.replace('images', 'cls_masks')
     ann_files = os.listdir(ann_directory)
-    for root, dirs, files in os.walk(source_dir):
+    for root, dirs, files in os.walk(os.path.join(source_dir, "images")):
         for file in files:
             
             filename, ext = os.path.splitext(file)
@@ -132,9 +132,11 @@ if __name__ == "__main__":
     parser.add_argument('--xml', type=str, help='Path to the CVAT XML file')
     parser.add_argument('--dest_path', type=str, help='Path to the CVAT annoations storage path')
     parser.add_argument('--save_images', action='store_true', help='Whether to save the images')
+    parser.add_argument('--save_stems', action='store_true', help='Whether to save the images')
     
     args = parser.parse_args()
-    
+    if not os.path.exists(args.dest_path):
+        os.makedirs(args.dest_path, exist_ok=True)
     annotation_data, labels_mapping = parse_cvat_annotation(args.xml)
 
     class_directory = os.path.join(args.dest_path, "cls_masks")
@@ -193,7 +195,10 @@ if __name__ == "__main__":
     
     if args.save_images:
         # get directory name two levels down
-        source_dir = os.path.dirname(os.path.dirname(args.xml))
-        dest_dir = os.path.join(args.dest_path, "images")
-        copy_images(source_dir, dest_dir)
+        source_dir = os.path.dirname(args.xml)
+        print(source_dir)
+        dest_dir = os.path.join(args.dest_path, "rgb")
+        shutil.move(os.path.join(source_dir, "images"), dest_dir)
+    if not args.save_stems:
+        shutil.rmtree(stem_directory)
                 
