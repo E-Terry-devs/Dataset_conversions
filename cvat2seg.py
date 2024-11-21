@@ -155,7 +155,10 @@ if __name__ == "__main__":
         mask_class = np.zeros((height, width, 3), dtype=np.uint8)
 
         for mask_info in image_info['masks']:
-            cvat_rle = utils.deserialize_cvat_rle(mask_info)
+            try:
+                cvat_rle = utils.deserialize_cvat_rle(mask_info)
+            except:
+                continue
             mask = utils.cvat_rle_to_binary_image_mask(cvat_rle, image_info['height'], image_info['width'])
             mask_class[mask>0] = tuple(int(labels_mapping[mask_info['label']]['color'][i:i + 2], 16) for i in (1, 3, 5))
 
