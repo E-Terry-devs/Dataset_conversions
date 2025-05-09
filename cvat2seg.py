@@ -164,7 +164,8 @@ if __name__ == "__main__":
 
         mask_class = Image.fromarray(mask_class)
         
-       
+        # remove the images/E-Terry_Field_Data_20250508_20250508_124953.jpg images from the path
+        image_info['name'] = image_info['name'].split('/')[-1]
         mask_class.save(f'{class_directory}/{image_info["name"]}')
             
         # Draw points on the mask_stem with radius 5 using label_mapping
@@ -199,7 +200,6 @@ if __name__ == "__main__":
     if args.save_images:
         # get directory name two levels down
         source_dir = os.path.dirname(args.xml)
-        print(source_dir)
         dest_dir = os.path.join(args.dest_path, "rgb")
         shutil.move(os.path.join(source_dir, "images"), dest_dir)
     if not args.save_stems:
